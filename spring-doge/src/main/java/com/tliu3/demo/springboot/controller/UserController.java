@@ -18,6 +18,11 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity getAll() {
+		return ResponseEntity.ok(userRepository.findAll());
+	}
+
 	@RequestMapping(value = "{userId}", method = RequestMethod.GET)
 	public ResponseEntity getUserById(@PathVariable Long userId) {
 		User user = userRepository.findById(userId)

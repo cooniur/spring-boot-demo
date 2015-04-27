@@ -4,12 +4,25 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 @SpringBootApplication
 public class SpringDogeApplication {
+
+	@Bean
+	WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
+		return new WebMvcConfigurerAdapter() {
+			@Override
+			public void addViewControllers(ViewControllerRegistry registry) {
+				registry.addViewController("/").setViewName("client");
+				registry.addViewController("/log").setViewName("log");
+			}
+		};
+	}
 
 	@Bean
 	Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {

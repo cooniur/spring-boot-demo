@@ -27,6 +27,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>io.spring.doge</groupId>
+			<artifactId>spring-doge-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
