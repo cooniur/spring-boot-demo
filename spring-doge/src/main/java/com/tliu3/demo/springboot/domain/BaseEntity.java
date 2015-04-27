@@ -11,6 +11,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @MappedSuperclass
 public class BaseEntity {
@@ -26,6 +30,8 @@ public class BaseEntity {
 
 	@Column(name = "create_date", updatable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
@@ -36,6 +42,8 @@ public class BaseEntity {
 
 	@Column(name = "update_date", updatable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	public LocalDateTime getUpdateDate() {
 		return updateDate;
 	}
@@ -44,8 +52,8 @@ public class BaseEntity {
 		this.updateDate = updateDate;
 	}
 
-	@JsonIgnore
 	@Version
+	@JsonIgnore
 	public Long getVersion() {
 		return version;
 	}

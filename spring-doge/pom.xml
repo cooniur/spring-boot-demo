@@ -54,7 +54,15 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
+		<!-- Jackson -->
+		<!-- To support Java 8's new Time classes -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
