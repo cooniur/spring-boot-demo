@@ -37,7 +37,6 @@ public class User extends BaseEntity {
 	public User(String name, UserPhoto photo) {
 		this(name);
 		this.photo = photo;
-		photo.setUser(this);
 	}
 
 	private String name;

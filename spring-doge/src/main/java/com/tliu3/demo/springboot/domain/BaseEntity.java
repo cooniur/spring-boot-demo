@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.Type;
@@ -60,6 +62,19 @@ public class BaseEntity {
 
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+
+	@PreUpdate
+	@PrePersist
+	private void beforeUpdate() {
+		updateTimestamps();
+	}
+
+	private void updateTimestamps() {
+		updateDate = LocalDateTime.now();
+		if (createDate == null) {
+			createDate = LocalDateTime.now();
+		}
 	}
 
 	protected Long id;
