@@ -2,6 +2,8 @@ package com.tliu3.demo.springboot.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,11 +34,14 @@ import doge.photo.PhotoResource;
 public class UserController {
 	private final UserRepository userRepository;
 	private final DogeService dogeService;
+	private final SimpMessagingTemplate messaging;
 
 	@Autowired
-	public UserController(UserRepository userRepository, DogeService dogeService) {
+	public UserController(UserRepository userRepository, DogeService dogeService,
+			SimpMessagingTemplate messaging) {
 		this.userRepository = userRepository;
 		this.dogeService = dogeService;
+		this.messaging = messaging;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -70,6 +76,16 @@ public class UserController {
 		this.dogeService.addDogePhoto(user, photo);
 		URI uri = uriBuilder.path("/user/{userId}/doge")
 				.buildAndExpand(userId).toUri();
+		this.sendMessage(user, uri);
 		return ResponseEntity.created(uri).build();
+	}
+
+	private void sendMessage(User user, URI uri) {
+		Map<String, Object> msg = new HashMap<>();
+		msg.put("dogePhotoUri", uri.toString());
+		msg.put("userId", user.getId());
+		msg.put("userName", user.getName());
+		msg.put("uploadDate", java.time.Clock.systemUTC().instant().toString());
+		this.messaging.convertAndSend("/topic/alarms", msg);
 	}
 }
