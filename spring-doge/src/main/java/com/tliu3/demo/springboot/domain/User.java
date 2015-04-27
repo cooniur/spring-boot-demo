@@ -7,6 +7,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user")
 public class User extends BaseEntity {
@@ -19,6 +21,7 @@ public class User extends BaseEntity {
 		this.name = name;
 	}
 
+	@JsonIgnore
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, mappedBy = "user")
 	public UserPhoto getPhoto() {
 		return photo;
