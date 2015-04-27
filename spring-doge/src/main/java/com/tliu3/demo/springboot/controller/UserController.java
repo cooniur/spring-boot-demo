@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tliu3.demo.springboot.domain.User;
 import com.tliu3.demo.springboot.domain.UserRepository;
+import com.tliu3.demo.springboot.exception.NotFoundException;
 
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -19,11 +20,8 @@ public class UserController {
 
 	@RequestMapping(value = "{userId}", method = RequestMethod.GET)
 	public ResponseEntity getUserById(@PathVariable Long userId) {
-		User user = userRepository.findOne(userId);
-		if (user == null) {
-			return ResponseEntity.notFound().build();
-		} else {
-			return ResponseEntity.ok(user);
-		}
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new NotFoundException("User " + userId + " not found."));
+		return ResponseEntity.ok(user);
 	}
 }
